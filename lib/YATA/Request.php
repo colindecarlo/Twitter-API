@@ -1,6 +1,8 @@
 <?php
 
-namespace Twitter;
+namespace YATA;
+
+use YATA\Exception;
 
 class Request
 {
@@ -29,7 +31,7 @@ class Request
   {
 
     foreach ($this->_config as $option => $value) {
-      $setter = 'set' . Twitter::normaliseOption($option);
+      $setter = 'set' . YATA::normaliseOption($option);
       if (method_exists($this, $setter)) {
         $this->$setter($value);
       }
@@ -131,7 +133,7 @@ class Request
           break;
 
         default:
-          throw new Twitter_Exception('Unknown http_request_type: ' . $this->_config['http_request_type']);
+          throw new Exception('Unknown http_request_type: ' . $this->_config['http_request_type']);
 
       }
     }
@@ -139,7 +141,7 @@ class Request
     $response = curl_exec($ch);
 
     if ($response === false) {
-      throw new Twitter_Exception(curl_error($ch));
+      throw new Exception(curl_error($ch));
     }
 
     return $response;

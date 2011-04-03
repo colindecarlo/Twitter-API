@@ -1,6 +1,6 @@
 <?php
 
-namespace Twitter;
+namespace YATA;
 
 class Exception extends \Exception
 {}

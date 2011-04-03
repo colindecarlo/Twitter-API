@@ -1,10 +1,10 @@
 <?php
 
-namespace Twitter\Test;
+namespace YATA\Test;
 
 require __DIR__ . '/../bootstrap.php';
 
-use Twitter\Request;
+use YATA\Request;
 
 class RequestTest extends \PHPUnit_Framework_TestCase
 {

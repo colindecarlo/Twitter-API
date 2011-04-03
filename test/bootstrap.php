@@ -7,6 +7,6 @@ use Symfony\Component\ClassLoader\UniversalClassLoader;
 
 $loader = new UniversalClassLoader();
 $loader->registerNamespaces(array(
-  'Twitter' => __DIR__ . '/../lib',
+  'YATA' => __DIR__ . '/../lib',
 ));
 $loader->register();

@@ -1,8 +1,8 @@
 <?php
 
-namespace Twitter;
+namespace YATA;
 
-class Twitter
+class YATA
 {
 
   public static function normaliseOption($option)

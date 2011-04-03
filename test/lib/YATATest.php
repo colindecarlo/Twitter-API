@@ -1,12 +1,12 @@
 <?php
 
-namespace Twitter\Test;
+namespace YATA\Test;
 
 require __DIR__ . '/../bootstrap.php';
 
-use Twitter\Twitter;
+use YATA\YATA;
 
-class TwitterTest extends \PHPUnit_Framework_TestCase
+class YATATest extends \PHPUnit_Framework_TestCase
 {
 
   /**
@@ -15,7 +15,7 @@ class TwitterTest extends \PHPUnit_Framework_TestCase
   public function testNormaliseOptionWorks($option, $expected)
   {
 
-    $norm = Twitter::normaliseOption($option);
+    $norm = YATA::normaliseOption($option);
 
     $this->assertEquals($expected, $norm);
 

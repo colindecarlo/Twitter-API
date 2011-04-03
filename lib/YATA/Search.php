@@ -1,9 +1,9 @@
 <?php
 
-namespace Twitter;
+namespace YATA;
 
-use Twitter\Request;
-use Twitter\Exception;
+use YATA\Request;
+use YATA\Exception;
 
 class Search
 {

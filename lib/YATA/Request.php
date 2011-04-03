@@ -7,10 +7,9 @@ use YATA\Exception;
 class Request
 {
 
-  const URL_SEARCH = 'http://search.twitter.com/search.%format%';
 
   protected $_config = array('format' => 'json',
-                             'request_type' => self::URL_SEARCH,
+                             'request_type' => YATA::URL_SEARCH,
                              'http_request_type' => 'GET',);
 
   protected $_parameters = array();
@@ -21,9 +20,6 @@ class Request
     $this->_config = array_merge_recursive($this->_config, $config);
 
     $this->_init();
-    if (isset($config['parameters'])) {
-      $this->setParameters($config['parameters']);
-    }
 
   }
 

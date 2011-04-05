@@ -9,7 +9,7 @@ class Request
 
 
   protected $_config = array('format' => 'json',
-                             'request_type' => YATA::URL_SEARCH,
+                             'request_url' => YATA::URL_SEARCH,
                              'http_request_type' => 'GET',);
 
   protected $_parameters = array();
@@ -17,7 +17,7 @@ class Request
 
   public function __construct(array $config = array())
   {
-    $this->_config = array_merge_recursive($this->_config, $config);
+    $this->_config = array_merge($this->_config, $config);
 
     $this->_init();
 
@@ -59,16 +59,17 @@ class Request
     return $this->_config['http_request_type'];
   }
 
-  public function setRequestType($type)
+  public function setRequestUrl($url)
   {
-    $this->_config['request_type'] = $type;
+    $this->_config['request_url'] = $url;
 
     return $this;
   }
 
-  public function getRequestType()
+  public function getRequestUrl()
   {
-    return $this->_config['request_type'];
+    $url = strtr($this->_config['request_url'], array('%format%' => $this->_config['format']));
+    return $url;
   }
 
   public function setParameters(array $params)
@@ -107,7 +108,7 @@ class Request
   public function send()
   {
 
-    $url = strtr($this->_config['request_type'], array('%format%' => $this->_config['format']));
+    $url = strtr($this->_config['request_url'], array('%format%' => $this->_config['format']));
 
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

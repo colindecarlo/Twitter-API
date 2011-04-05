@@ -83,7 +83,7 @@ class OAuth extends Request
 
   }
 
-  public function _generateSignatureBaseString()
+  private function _generateSignatureBaseString()
   {
 
     $requestMethod = $this->getHttpRequestType();
@@ -115,7 +115,7 @@ class OAuth extends Request
 
   }
 
-  public function _generateOAuthSignature()
+  private function _generateOAuthSignature()
   {
     $key = rawurlencode($this->_consumerSecretKey) . '&';
     if (isset($this->_oauthTokenSecret)) {
@@ -129,7 +129,7 @@ class OAuth extends Request
     return $signature;
   }
 
-  public function _getAuthenticationHeader()
+  private function _getAuthenticationHeader()
   {
     // create a nonce and timestamp the request
     $this->setOAuthHeader('oauth_timestamp', time(), true);

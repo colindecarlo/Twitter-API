@@ -120,6 +120,8 @@ class OAuth extends Request
 
     $baseString .= implode('%26', $encodedParams);
 
+    var_dump($baseString);
+
     return $baseString;
 
   }
@@ -130,11 +132,13 @@ class OAuth extends Request
     if (isset($this->_oauthTokenSecret)) {
       $key .= rawurlencode($this->_oauthTokenSecret);
     }
+    var_dump($key);
 
 
     $hash = hash_hmac('sha1',$this->_generateSignatureBaseString(),$key, true);
     $signature = base64_encode($hash);
 
+    var_dump($signature);
     return $signature;
   }
 
@@ -154,6 +158,8 @@ class OAuth extends Request
     $gluedHeaders[] = sprintf("%s=\"%s\"", 'oauth_signature',rawurlencode($signature));
 
     $header = 'Authorization: OAuth ' . implode(', ', $gluedHeaders);
+
+    var_dump($header);
 
     return $header;
 
@@ -195,16 +201,24 @@ class OAuth extends Request
   public function send()
   {
 
-    $url = strtr($this->_config['request_url'], array('%format%' => $this->_config['format']));
+    $ch = curl_init();
 
-    $ch = curl_init($url);
+    curl_setopt($ch, CURLINFO_HEADER_OUT, true);
 
     // add the oauth header
     curl_setopt($ch, CURLOPT_HTTPHEADER, array($this->_getAuthenticationHeader()));
     
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($this->_parameters));
+    // build the url and set the query string or the post body
+    $url = strtr($this->_config['request_url'], array('%format%' => $this->_config['format']));
+    $queryString = http_build_query($this->_parameters);
+    if ($this->_config['http_request_type'] == 'GET') {
+      $url .= '?'.$queryString;
+    } else {
+      curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($this->_parameters));
+    }
+    curl_setopt($ch, CURLOPT_URL, $url);
 
     // since the default curl request is GET we only have to change it if its 
     // *not* GET
@@ -227,6 +241,9 @@ class OAuth extends Request
     }
 
     $response = curl_exec($ch);
+
+    $req = curl_getinfo($ch);
+    print_r($req);
 
     if ($response === false) {
       throw new Exception(curl_error($ch));

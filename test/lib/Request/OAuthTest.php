@@ -44,19 +44,38 @@ class OAuthTest extends \PHPUnit_Framework_TestCase
     $config = array('http_request_type' => 'POST',
                     'request_url' => YATA::URL_STATUSES_UPDATE,
                     'consumer_key' => '<YOUR CONSUMER KEY>',
-                    'consumer_secret_key' => '<YOUR CONSUMER SECRET KEY>'
+                    'consumer_secret_key' => '<YOUR CONSUMER SECRET KEY>',
                     'oauth_token_secret' => '<YOUR OAUTH TOKEN SECRET>',
                     );
 
     $request = new OAuth($config);
     $request->setOAuthHeader('oauth_token','<YOUR OAUTH TOKEN>')
       ->setOAuthHeader('oauth_callback',urlencode('http://localhost:3005/the_dance/process_callback?service_provider_id=11'));
-    $request->addParameter('status',"I'm going to bed #YATA");
+    $request->addParameter('status',"Tweeting with #YATA");
 
     $response = $request->send();
     
-    $regexp = '/"text":"I\'m going to bed #YATA"/';
+    $regexp = '/"text":"Tweeting with #YATA"/';
     $this->assertRegExp($regexp, $response);
+
+  }
+
+  public function testCanGetMentions()
+  {
+
+    $config = array('request_url' => YATA::URL_STATUSES_MENTIONS,
+                    'consumer_key' => '<YOUR CONSUMER KEY>',
+                    'consumer_secret_key' => '<YOUR CONSUMER SECRET KEY>',
+                    'oauth_token_secret' => '<YOUR OAUTH TOKEN SECRET>',
+                    );
+
+    $request = new OAuth($config);
+    $request->setOAuthHeader('oauth_token','<YOUR OAUTH TOKEN>')
+      ->setOAuthHeader('oauth_callback',urlencode('http://localhost:3005/the_dance/process_callback?service_provider_id=11'));
+
+    $response = $request->send();
+    
+    echo $response . "\n";
 
   }
 

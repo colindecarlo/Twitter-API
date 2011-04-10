@@ -117,12 +117,19 @@ class Request
   public function send()
   {
 
-    $url = strtr($this->_config['request_url'], array('%format%' => $this->_config['format']));
 
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($this->_parameters));
+    $url = strtr($this->_config['request_url'], array('%format%' => $this->_config['format']));
+    $queryString = http_build_query($this->_parameters);
+    if ($this->_config['http_request_type'] == 'GET') {
+      $url .= '?' . $queryString;
+    } else {
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $queryString);
+    }
+
+    curl_setopt($ch, CURLOPT_URL, $url);
 
     // since the default curl request is GET we only have to change it if its 
     // *not* GET
@@ -149,6 +156,8 @@ class Request
     if ($response === false) {
       throw new Exception(curl_error($ch));
     }
+
+    curl_close($ch);
 
     return $response;
 

@@ -20,6 +20,7 @@ class OAuth extends Request
   private $_consumerSecretKey = null;
   private $_consumerKey = null;
   private $_oauthTokenSecret = null;
+  private $_oauthToken = null;
 
   protected function _init()
   {
@@ -35,6 +36,7 @@ class OAuth extends Request
   public function setOauthTokenSecret($secret)
   {
     $this->_oauthTokenSecret = $secret;
+    return $this;
   }
 
   public function getOauthTokenSecret()
@@ -45,6 +47,7 @@ class OAuth extends Request
   public function setConsumerSecretKey($key)
   {
     $this->_consumerSecretKey = $key;
+    return $this;
   }
 
   public function getConsumerSecretKey()
@@ -55,12 +58,23 @@ class OAuth extends Request
   public function setConsumerKey($key)
   {
     $this->_consumerKey = $key;
-    $this->setOAuthHeader('oauth_consumer_key',$key,true);
+    return $this->setOAuthHeader('oauth_consumer_key',$key,true);
   }
 
   public function getConsumerKey()
   {
     return $this->_consumerKey;
+  }
+
+  public function setOauthToken($token)
+  {
+    $this->_oauthtoken = $token;
+    return $this->setOAuthHeader('oauth_token',$token,true);
+  }
+
+  public function getOauthToken()
+  {
+    return $this->_oauthToken;
   }
 
   public function setOAuthHeaders(array $headers, $overwrite = false)
@@ -120,8 +134,6 @@ class OAuth extends Request
 
     $baseString .= implode('%26', $encodedParams);
 
-    var_dump($baseString);
-
     return $baseString;
 
   }
@@ -132,13 +144,10 @@ class OAuth extends Request
     if (isset($this->_oauthTokenSecret)) {
       $key .= rawurlencode($this->_oauthTokenSecret);
     }
-    var_dump($key);
-
 
     $hash = hash_hmac('sha1',$this->_generateSignatureBaseString(),$key, true);
     $signature = base64_encode($hash);
 
-    var_dump($signature);
     return $signature;
   }
 
@@ -158,8 +167,6 @@ class OAuth extends Request
     $gluedHeaders[] = sprintf("%s=\"%s\"", 'oauth_signature',rawurlencode($signature));
 
     $header = 'Authorization: OAuth ' . implode(', ', $gluedHeaders);
-
-    var_dump($header);
 
     return $header;
 
@@ -242,12 +249,11 @@ class OAuth extends Request
 
     $response = curl_exec($ch);
 
-    $req = curl_getinfo($ch);
-    print_r($req);
-
     if ($response === false) {
       throw new Exception(curl_error($ch));
     }
+
+    curl_close($ch);
 
     return $response;
 

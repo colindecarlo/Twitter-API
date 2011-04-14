@@ -20,6 +20,8 @@ class YATA
   const URL_OAUTH_ACCESS_TOKEN = 'https://api.twitter.com/oauth/access_token';
   const URL_STATUSES_UPDATE = 'http://api.twitter.com/statuses/update.%format%';
   const URL_STATUSES_MENTIONS = 'http://api.twitter.com/statuses/mentions.%format%';
+  const URL_USERS_SEARCH = 'http://api.twitter.com/users/search.%format%';
+  const URL_USERS_SHOW = 'http://api.twitter.com/users/show.%format%';
 
   public static function normaliseOption($option)
   {
